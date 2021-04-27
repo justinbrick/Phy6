@@ -1,3 +1,5 @@
+import core.Keyboard;
+import core.Mouse;
 import org.lwjgl.*;
 import org.lwjgl.glfw.*;
 import org.lwjgl.opengl.*;
@@ -48,21 +50,22 @@ public class PhysicsRunner
         // Configure GLFW
         glfwDefaultWindowHints(); // optional, the current window hints are already the default
         glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE); // the window will stay hidden after creation
-        glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE); // the window will be resizable
+        glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE); // we don't want this resized (just don't have enough time to deal with that)
 
         // Create the window
-        window = glfwCreateWindow(300, 300, "Hello World!", NULL, NULL);
+        window = glfwCreateWindow(1200, 700, "Phy6", NULL, NULL);
         if ( window == NULL )
             throw new RuntimeException("Failed to create the GLFW window");
 
         // Setup a key callback. It will be called every time a key is pressed, repeated or released.
-        glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> {
-            if ( key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE )
-                glfwSetWindowShouldClose(window, true); // We will detect this in the rendering loop
-        });
+
+        glfwSetMouseButtonCallback(window, Mouse::updateMouseButton);
+        glfwSetCursorPosCallback(window, Mouse::updateMousePos);
+        glfwSetKeyCallback(window, Keyboard::keyPressedCallback);
 
         // Get the thread stack and push a new frame
-        try ( MemoryStack stack = stackPush() ) {
+        try ( MemoryStack stack = stackPush() )
+        {
             IntBuffer pWidth = stack.mallocInt(1); // int*
             IntBuffer pHeight = stack.mallocInt(1); // int*
 
@@ -89,19 +92,15 @@ public class PhysicsRunner
         glfwShowWindow(window);
     }
 
-    private void loop() {
-        // This line is critical for LWJGL's interoperation with GLFW's
-        // OpenGL context, or any context that is managed externally.
-        // LWJGL detects the context that is current in the current thread,
-        // creates the GLCapabilities instance and makes the OpenGL
-        // bindings available for use.
+    private void loop()
+    {
+        // Allows interrop (essential)
         GL.createCapabilities();
 
         // Set the clear color
-        glClearColor(1.0f, 0.0f, 0.0f, 0.0f);
+        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 
-        // Run the rendering loop until the user has attempted to close
-        // the window or has pressed the ESCAPE key.
+        // Will continue running until closed.
         while ( !glfwWindowShouldClose(window) ) {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
 
