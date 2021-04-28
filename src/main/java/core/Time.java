@@ -13,7 +13,14 @@ public class Time
         deltaTime = (currentTime - lastTime) / 1000000000f; // TODO: Find something better for this.
 
         if (deltaTime < TIME_MIN)
-            deltaTime = TIME_MIN;
+        {
+            try
+            {
+                Thread.sleep((long)(TIME_MIN - deltaTime));
+                deltaTime = TIME_MIN;
+            }
+            catch (InterruptedException e) { } // I honestly don't know what would be standard to do in this case-scenario.
+        }
         else if (deltaTime > TIME_MAX)
             deltaTime = TIME_MAX;
 

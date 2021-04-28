@@ -8,8 +8,8 @@ public class Game
     // Every time a frame runs,
     public static void update()
     {
+        Time.updateDeltaTime();
         Entity.update(); // Update first, then render.
         Entity.render();
-        Time.updateDeltaTime();
     }
 }
