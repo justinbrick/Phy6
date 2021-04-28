@@ -50,6 +50,7 @@ public abstract class Entity
         }
     }
 
+    // This will be where pixels do their logic.
     public abstract void tick();
 
     public Color getColor()

@@ -22,6 +22,19 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 public class Window
 {
     private long window; // The handle for the window (GLFW)
+    private static final int windowWidth = 1200;
+    private static final int windowHeight = 700;
+
+    // These might change in the future? I don't think so but better to encapsulate them than refactor.
+    public static int getWindowHeight()
+    {
+        return windowWidth;
+    }
+
+    public static int getWindowWidth()
+    {
+        return windowHeight;
+    }
 
     public void run()
     {
@@ -56,6 +69,8 @@ public class Window
         window = glfwCreateWindow(1200, 700, "Phy6", NULL, NULL);
         if ( window == NULL )
             throw new RuntimeException("Failed to create the GLFW window");
+
+
 
 
         // Setting up the callbacks.
@@ -94,15 +109,24 @@ public class Window
 
     private void loop()
     {
-        // Allows interrop (essential)
+        // Allows interop (essential)
         GL.createCapabilities();
-
-        // Set the clear color
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        glMatrixMode(GL_PROJECTION); // We want to do projection during this entire project.
+        glLoadIdentity();
+        glOrtho(0f, 10f, 0f, 10f, -1f, 1f);
 
         // Will continue running until closed.
         while ( !glfwWindowShouldClose(window) ) {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
+            glColor3f(0f, 1f, 0f);
+            glBegin(GL_POLYGON);
+            glVertex3f(2.0f, 4.0f, 0.0f);
+            glVertex3f(8.0f, 4.0f, 0.0f);
+            glVertex3f(8.0f, 6.0f, 0.0f);
+            glVertex3f(2.0f, 6.0f, 0.0f);
+            glEnd();
+            glFlush();
 
             glfwSwapBuffers(window); // swap the color buffers
 

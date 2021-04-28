@@ -4,6 +4,9 @@ import static org.lwjgl.glfw.GLFW.*;
 
 /**
  * This is how we'll be getting events or information from the mouse.
+ * Some of this was ripped by a tutorial online, but I don't think this guy knew what he was doing,
+ * and I was reasonably tired and too lazy to do this at the time, so this'll probably be reworked in a way
+ * that actually makes sense to use in game fashion.
  */
 public class Mouse
 {
