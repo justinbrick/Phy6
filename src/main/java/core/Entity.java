@@ -15,7 +15,7 @@ import java.awt.*;
  */
 public abstract class Entity
 {
-    public static Entity[][] entityList = new Entity[70][120]; // Maybe not hardcode this?
+    public static Entity[][] entityList = new Entity[140][240]; // Maybe not hardcode this?
     private Color color = Color.WHITE; // The color of this object.
     private Vector2 position = null; // The position of the object on the screen.
     private boolean onBoard = false;
@@ -56,6 +56,8 @@ public abstract class Entity
         position.setY((position.getY() < 0) ? 0 : position.getY());
     }
 
+
+
     /**
      * Checks if the position is in the bounds of the board.
      * @param position The position that we're querying.
@@ -77,7 +79,7 @@ public abstract class Entity
             {
                 Entity ent = entityList[row][column];
                 if (ent == null || !ent.isOnBoard()) continue;
-                glClear(GL_COLOR_BUFFER_BIT); // Clear the colors.
+                //glClear(GL_COLOR_BUFFER_BIT); // Clear the colors.
                 glColor3fv(ent.getColor().getRGBColorComponents(null));
                 glBegin(GL_POLYGON);
                 // As I understand, the third value is the distance to and from the screen. We don't care about that.

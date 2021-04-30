@@ -112,13 +112,14 @@ public class Window
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         glMatrixMode(GL_PROJECTION); // We want to do projection during this entire project.
         glLoadIdentity();
-        glOrtho(0, 120, 0, 70, -1, 1); // see https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glOrtho.xml
+        glOrtho(0, 240, 0, 140, -1, 1); // see https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glOrtho.xml
         // Will continue running until closed.
         while ( !glfwWindowShouldClose(window) ) {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
             Game.update(); // Do game logic.
+            glfwPollEvents(); // Check for input
             glfwSwapBuffers(window); // swap the color buffers
-            glfwPollEvents(); // Check for window events
+
         }
     }
 }
