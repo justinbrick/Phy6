@@ -8,29 +8,62 @@ import java.util.ArrayList;
 import java.util.Vector;
 
 /**
- * Base class for entities,
- * this is how we will do logic for each "pixel"
+ * Entity
+ * There is a slight swap between the array and positions, this is because 2D arrays work different and I want
+ * logic done from top right to bottom left. Because of this, I have abstracted the use of it to positions, and
+ * if a pixel is wanted to move X, Y it will swap it to Y, X using set position and get position.
+ * There will also be a moveTo function which will move it to the position but stop it if it comes into contact with
+ * another pixel.
  */
 public abstract class Entity
 {
     public static Entity[][] entityList = new Entity[70][120]; // Maybe not hardcode this?
     private Color color = Color.WHITE; // The color of this object.
-    private Vector2 position = new Vector2(0,0); // The position of the object on the screen.
+    private Vector2 position = null; // The position of the object on the screen.
     public boolean hasTicked = false;
 
     public Entity()
     {
-        entityList[0][0] = this;
+        spawn(new Vector2(0,0));
     }
 
     public Entity(Color color, Vector2 position)
     {
-        entityList[0][0] = this;
         this.color = color;
-        this.position = position;
+        spawn(position);
     }
 
-    // Rendering the pixels.
+    /**
+     * Spawns the entity at a given position.
+     * THIS WILL NOT REMOVE THE PIXEL AT THE LAST POSITION! DO NOT USE TO MOVE!
+     * @param position position to spawn
+     */
+    private void spawn(Vector2 position)
+    {
+        if (isOutOfBounds(position))
+            moveIntoBounds(position);
+        this.position = position;
+        entityList[(int) position.getY()][(int) position.getX()] = this;
+    }
+
+    public static void moveIntoBounds(Vector2 position)
+    {
+        position.setX((position.getX() > entityList[0].length) ? entityList[0].length - 1 : position.getX());
+        position.setX((position.getX() < 0) ? 0 : position.getX());
+        position.setY((position.getY() > entityList[0].length) ? entityList[0].length - 1 : position.getY());
+        position.setY((position.getY() < 0) ? 0 : position.getY());
+    }
+
+    public static boolean isOutOfBounds(Vector2 position)
+    {
+        if (position.getY() > entityList.length || position.getX() > entityList[0].length || position.getX() < 0 || position.getY() < 0)
+            return true;
+        return false;
+    }
+
+    /**
+     * Renders all the pixels in the entity list.
+     */
     public static void render()
     {
         for (int row = 0; row < entityList.length; ++row)
@@ -44,18 +77,20 @@ public abstract class Entity
                 glColor3f(0, 1, 0);
                 glBegin(GL_POLYGON);
                 // As I understand, the third value is the distance to and from the screen. We don't care about that.
-                // Left Up
-                glVertex3f(ent.position.getX(), ent.position.getY(), 0.0f); // Bottom Left
-                glVertex3f(ent.position.getX() + 1, ent.position.getY(), 0.0f); // Bottom Right
-                glVertex3f(ent.position.getX() + 1, ent.position.getY() + 1, 0.0f); // Top Right
-                glVertex3f(ent.position.getX(), ent.position.getY() + 1, 0.0f); // Top Left
+                glVertex3f(column, row, 0.0f); // Bottom Left
+                glVertex3f(column + 1, row, 0.0f); // Bottom Right
+                glVertex3f(column + 1, row + 1, 0.0f); // Top Right
+                glVertex3f(column, row + 1, 0.0f); // Top Left
                 glEnd();
                 glFlush();
             }
         }
     }
 
-    // The logic part.
+
+    /**
+     * Will do logic on all the pixels that are in the board.
+     */
     public static void update()
     {
         for (Entity[] entColumn : entityList)
@@ -80,7 +115,7 @@ public abstract class Entity
 
     public static void debug()
     {
-        entityList[5][3] = new Pixel();
+        new Pixel(Color.WHITE, new Vector2(5, 3));
     }
 
     // This will be where pixels do their logic.
@@ -113,6 +148,14 @@ public abstract class Entity
 
     public void setPosition(Vector2 position)
     {
-        this.position = position;
+        if (this.position == null) // If it is null then we have not placed it in yet.
+            spawn(position);
+        else
+        {
+            if (isOutOfBounds(position))
+                moveIntoBounds(position);
+            entityList[(int) this.position.getY()][(int) this.position.getX()] = null;
+            entityList[(int) position.getY()][(int) position.getX()] = this;
+        }
     }
 }

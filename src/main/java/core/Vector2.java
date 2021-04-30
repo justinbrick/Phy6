@@ -1,5 +1,12 @@
 package core;
 
+/**
+ * Vector2
+ *
+ * The x and y are floats because this is going to be used for velocity but it is also being used for position,
+ * explaining why I have casts to ints in all references requiring ints and being supplied these values.
+ *
+ */
 public class Vector2
 {
     private float x;

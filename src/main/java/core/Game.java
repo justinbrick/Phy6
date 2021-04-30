@@ -9,7 +9,7 @@ public class Game
     public static void update()
     {
         Time.updateDeltaTime();
-        Entity.update(); // Update first, then render.
         Entity.render();
+        Entity.update();
     }
 }

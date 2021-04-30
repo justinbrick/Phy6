@@ -13,6 +13,11 @@ public class Pixel extends Entity
         super();
     }
 
+    public Pixel(Color color, Vector2 pos)
+    {
+        super(color, pos);
+    }
+
     public void tick()
     {
         doLogic();

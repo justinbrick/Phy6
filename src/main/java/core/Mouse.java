@@ -1,5 +1,7 @@
 package core;
 
+import java.awt.*;
+
 import static org.lwjgl.glfw.GLFW.*;
 
 /**
@@ -14,6 +16,7 @@ public class Mouse
     private double mouseX, mouseY, lastX, lastY;
     private boolean[] mouseButtonDown = new boolean[3];
     private boolean beingHeld = false;
+    private static Pixel debugPixel = new Pixel(Color.WHITE, new Vector2(20, 20));
 
     public Mouse()
     {
@@ -29,6 +32,7 @@ public class Mouse
         return current;
     }
 
+    // Why are these doubles??
     public static void updateMousePos(long window, double mouseX, double mouseY)
     {
         Mouse mouse = get();
@@ -36,6 +40,7 @@ public class Mouse
         mouse.lastY = mouse.mouseY;
         mouse.mouseX = mouseX;
         mouse.mouseY = mouseY;
+        debugPixel.setPosition(new Vector2((int)mouseX / 10, 69 - (int)mouseY / 10));
     }
 
     public static void updateMouseButton(long window, int button, int action, int mods)
