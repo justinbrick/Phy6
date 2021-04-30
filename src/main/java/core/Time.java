@@ -16,7 +16,7 @@ public class Time
         {
             try
             {
-                Thread.sleep((long)(TIME_MIN - deltaTime));
+                Thread.sleep((long)((TIME_MIN - deltaTime)*1000f));
                 deltaTime = TIME_MIN;
             }
             catch (InterruptedException e) { } // I honestly don't know what would be standard to do in this case-scenario.

@@ -13,7 +13,7 @@ import java.util.Vector;
  */
 public abstract class Entity
 {
-    public static Entity[][] entityList = new Entity[Window.getWindowHeight()][Window.getWindowWidth()];
+    public static Entity[][] entityList = new Entity[70][120]; // Maybe not hardcode this?
     private Color color = Color.WHITE; // The color of this object.
     private Vector2 position = new Vector2(0,0); // The position of the object on the screen.
     public boolean hasTicked = false;
@@ -44,10 +44,11 @@ public abstract class Entity
                 glColor3f(0, 1, 0);
                 glBegin(GL_POLYGON);
                 // As I understand, the third value is the distance to and from the screen. We don't care about that.
-                glVertex3f(2.0f, 4.0f, 0.0f); // Bottom Left
-                glVertex3f(8.0f, 4.0f, 0.0f); // Top Left
-                glVertex3f(8.0f, 6.0f, 0.0f); // Top Right
-                glVertex3f(2.0f, 6.0f, 0.0f); // Bottom Right
+                // Left Up
+                glVertex3f(ent.position.getX(), ent.position.getY(), 0.0f); // Bottom Left
+                glVertex3f(ent.position.getX() + 1, ent.position.getY(), 0.0f); // Bottom Right
+                glVertex3f(ent.position.getX() + 1, ent.position.getY() + 1, 0.0f); // Top Right
+                glVertex3f(ent.position.getX(), ent.position.getY() + 1, 0.0f); // Top Left
                 glEnd();
                 glFlush();
             }
@@ -67,7 +68,9 @@ public abstract class Entity
             for (int column = 0; column < entityList[row].length; ++column)
             {
                 Entity ent = entityList[row][column];
-                if (ent == null) continue;
+                if (ent == null || ent.hasTicked) continue;
+                ent.position.setY(row);
+                ent.position.setX(column);
                 ent.tick();
                 ent.doLogic();
                 ent.hasTicked = true;
@@ -77,7 +80,7 @@ public abstract class Entity
 
     public static void debug()
     {
-        entityList[300][300] = new Pixel();
+        entityList[5][3] = new Pixel();
     }
 
     // This will be where pixels do their logic.
