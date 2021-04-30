@@ -1,8 +1,9 @@
 package core;
 
 import java.awt.*;
+import java.util.Vector;
 
-public class Pixel extends Entity
+public abstract class Pixel extends Entity
 {
     public static final float GRAVITY_CONST = 10F; // The rate at which we want velocity to increase.
     private Vector2 velocity; // Our current pixel's velocity
@@ -17,23 +18,13 @@ public class Pixel extends Entity
         super(color, pos);
     }
 
-    public void tick()
+    public abstract void tick();
+
+    public boolean isSpaceBelow()
     {
-        doLogic();
+        if (isOutOfBounds(new Vector2(getPosition().getX(), getPosition().getY() - 1))) return false;
+        return getEntityAt(new Vector2(getPosition().getX(), getPosition().getY() - 1)) == null;
     }
 
-    public void doLogic()
-    {
 
-    }
-
-    public Vector2 getVelocity()
-    {
-        return this.velocity;
-    }
-
-    public void setVelocity(Vector2 vel)
-    {
-        this.velocity = vel;
-    }
 }

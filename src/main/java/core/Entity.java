@@ -18,7 +18,8 @@ public abstract class Entity
     public static Entity[][] entityList = new Entity[140][240]; // Maybe not hardcode this?
     private Color color = Color.WHITE; // The color of this object.
     private Vector2 position = null; // The position of the object on the screen.
-    private boolean onBoard = false;
+    private Vector2 velocity;
+    private boolean onBoard = true;
     private boolean hasTicked = false;
 
     public Entity()
@@ -37,12 +38,14 @@ public abstract class Entity
      * THIS WILL NOT REMOVE THE PIXEL AT THE LAST POSITION! DO NOT USE TO MOVE!
      * @param position position to spawn
      */
-    private void spawn(Vector2 position)
+    public void spawn(Vector2 position)
     {
         if (isOutOfBounds(position))
             moveIntoBounds(position);
         if (entityList[(int)position.getY()][(int)position.getX()] != null)
+        {
             return;
+        }
         entityList[(int) position.getY()][(int) position.getX()] = this;
         this.position = position;
         onBoard = true;
@@ -55,8 +58,6 @@ public abstract class Entity
         position.setY((position.getY() > entityList[0].length) ? entityList[0].length - 1 : position.getY());
         position.setY((position.getY() < 0) ? 0 : position.getY());
     }
-
-
 
     /**
      * Checks if the position is in the bounds of the board.
@@ -88,7 +89,7 @@ public abstract class Entity
                 glVertex3f(column + 1, row + 1, 0.0f); // Top Right
                 glVertex3f(column, row + 1, 0.0f); // Top Left
                 glEnd();
-                //glFlush(); // Forces to render, maybe prevents multiple rendered?
+                //glFlush(); //FORCERENDER
             }
         }
     }
@@ -115,6 +116,12 @@ public abstract class Entity
                 ent.hasTicked = true;
             }
         }
+    }
+
+    public static Entity getEntityAt(Vector2 position)
+    {
+        if (isOutOfBounds(position)) return null;
+        return entityList[(int)position.getY()][(int)position.getX()];
     }
 
     /**
@@ -150,6 +157,37 @@ public abstract class Entity
     }
 
     /**
+     * Sets the position of the pixel, if it is not in bounds then it will move it into bounds somewhere.
+     * @param position The position we want to move the pixel.
+     */
+    public void setPosition(Vector2 position)
+    {
+        if (this.position == null)
+        {
+            System.out.println("being called");
+            spawn(position);
+        }
+        else
+        {
+            if (isOutOfBounds(position))
+            {
+                moveIntoBounds(position);
+            }
+            if (entityList[(int)position.getY()][(int)position.getX()] != null)
+            {
+                return;
+            }
+
+            // TODO: I'm going to go insane.
+            // This will not remove the last pixel no matter what I do.
+            // I want to shoot myself in the foot.
+            entityList[(int) this.position.getY()][(int) this.position.getX()] = null;
+            entityList[(int) position.getY()][(int) position.getX()] = this;
+            this.position = position;
+        }
+    }
+
+    /**
      * Check whether the entity is on the board or not.
      * @return ^
      */
@@ -167,29 +205,7 @@ public abstract class Entity
         this.onBoard = onBoard;
     }
 
-    /**
-     * Sets the position of the pixel, if it is not in bounds then it will move it into bounds somewhere.
-     * @param position The position we want to move the pixel.
-     */
-    public void setPosition(Vector2 position)
-    {
-        if (this.position == null) // If it is null then we have not placed it in yet.
-            spawn(position);
-        else
-        {
-            if (isOutOfBounds(position))
-            {
-                moveIntoBounds(position);
-            }
-            if (entityList[(int)position.getY()][(int)position.getX()] != null)
-            {
-                return;
-            }
-            entityList[(int) this.position.getY()][(int) this.position.getX()] = null;
-            entityList[(int) position.getY()][(int) position.getX()] = this;
-            this.position = position;
-        }
-    }
+
 
     /**
      * Removes from the entity list and sets position to null.
@@ -210,4 +226,48 @@ public abstract class Entity
         entityList[(int)position.getY()][(int)position.getX()] = null;
         onBoard = false;
     }
+
+    public boolean isSpaceBelow()
+    {
+        if (isOutOfBounds(new Vector2(getPosition().getX(), getPosition().getY() - 1))) return false;
+        return getEntityAt(new Vector2(getPosition().getX(), getPosition().getY() - 1)) == null;
+    }
+
+    public boolean isSpaceLeft()
+    {
+        if (isOutOfBounds(new Vector2(getPosition().getX() - 1, getPosition().getY()))) return false;
+        return getEntityAt(new Vector2(getPosition().getX() - 1, getPosition().getY())) == null;
+    }
+
+    public boolean isSpaceRight()
+    {
+        if (isOutOfBounds(new Vector2(getPosition().getX() + 1, getPosition().getY()))) return false;
+        return getEntityAt(new Vector2(getPosition().getX() + 1, getPosition().getY())) == null;
+    }
+
+    public void moveDown()
+    {
+        setPosition(getPosition().withY(getPosition().getY() - 1));
+    }
+
+    public void moveLeft()
+    {
+        setPosition(getPosition().withX(getPosition().getX() - 1));
+    }
+
+    public void moveRight()
+    {
+        setPosition(getPosition().withX(getPosition().getY() + 1));
+    }
+
+    public Vector2 getVelocity()
+    {
+        return this.velocity;
+    }
+
+    public void setVelocity(Vector2 vel)
+    {
+        this.velocity = vel;
+    }
+
 }

@@ -15,6 +15,11 @@ public class Game
         Entity.update();
     }
 
+    public static void place()
+    {
+
+    }
+
     public static void changePixel(int key)
     {
 

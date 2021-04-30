@@ -114,6 +114,8 @@ public class Window
         glLoadIdentity();
         glOrtho(0, 240, 0, 140, -1, 1); // see https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glOrtho.xml
         // Will continue running until closed.
+        new SandPixel(new Vector2(20, 20));
+
         while ( !glfwWindowShouldClose(window) ) {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
             Game.update(); // Do game logic.
