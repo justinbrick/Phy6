@@ -4,8 +4,6 @@ package core;
 import static org.lwjgl.opengl.GL11.*;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.Vector;
 
 /**
  * Entity
@@ -20,7 +18,8 @@ public abstract class Entity
     public static Entity[][] entityList = new Entity[70][120]; // Maybe not hardcode this?
     private Color color = Color.WHITE; // The color of this object.
     private Vector2 position = null; // The position of the object on the screen.
-    public boolean hasTicked = false;
+    private boolean onBoard = false;
+    private boolean hasTicked = false;
 
     public Entity()
     {
@@ -42,8 +41,11 @@ public abstract class Entity
     {
         if (isOutOfBounds(position))
             moveIntoBounds(position);
-        this.position = position;
+        if (entityList[(int)position.getY()][(int)position.getX()] != null)
+            return;
         entityList[(int) position.getY()][(int) position.getX()] = this;
+        this.position = position;
+        onBoard = true;
     }
 
     public static void moveIntoBounds(Vector2 position)
@@ -54,11 +56,14 @@ public abstract class Entity
         position.setY((position.getY() < 0) ? 0 : position.getY());
     }
 
+    /**
+     * Checks if the position is in the bounds of the board.
+     * @param position The position that we're querying.
+     * @return Whether the position is on boards or not.
+     */
     public static boolean isOutOfBounds(Vector2 position)
     {
-        if (position.getY() > entityList.length || position.getX() > entityList[0].length || position.getX() < 0 || position.getY() < 0)
-            return true;
-        return false;
+        return position.getY() > entityList.length || position.getX() > entityList[0].length || position.getX() < 0 || position.getY() < 0;
     }
 
     /**
@@ -71,10 +76,9 @@ public abstract class Entity
             for (int column = 0; column < entityList[row].length; ++column)
             {
                 Entity ent = entityList[row][column];
-                if (ent == null) continue;
+                if (ent == null || !ent.isOnBoard()) continue;
                 glClear(GL_COLOR_BUFFER_BIT); // Clear the colors.
-                //glColor3fv(ent.getColor().getRGBColorComponents(null));
-                glColor3f(0, 1, 0);
+                glColor3fv(ent.getColor().getRGBColorComponents(null));
                 glBegin(GL_POLYGON);
                 // As I understand, the third value is the distance to and from the screen. We don't care about that.
                 glVertex3f(column, row, 0.0f); // Bottom Left
@@ -82,11 +86,10 @@ public abstract class Entity
                 glVertex3f(column + 1, row + 1, 0.0f); // Top Right
                 glVertex3f(column, row + 1, 0.0f); // Top Left
                 glEnd();
-                glFlush();
+                //glFlush(); // Forces to render, maybe prevents multiple rendered?
             }
         }
     }
-
 
     /**
      * Will do logic on all the pixels that are in the board.
@@ -107,45 +110,65 @@ public abstract class Entity
                 ent.position.setY(row);
                 ent.position.setX(column);
                 ent.tick();
-                ent.doLogic();
                 ent.hasTicked = true;
             }
         }
     }
 
-    public static void debug()
-    {
-        new Pixel(Color.WHITE, new Vector2(5, 3));
-    }
-
-    // This will be where pixels do their logic.
+    /**
+     * If the pixel needs to do some logic, then they can do it in this method.
+     */
     public abstract void tick();
 
-    // Not all entities will have logic, so this is not abstracted.
-    // We also need to make sure these never go out of bounds.
-    public void doLogic()
-    {
-        position.setX(position.getX() < 0 ? 0 : position.getX());
-        position.setX(position.getX() > Window.getWindowWidth() ? 0 : position.getX());
-        position.setY(position.getY() < 0 ? 0 : position.getY());
-        position.setY(position.getY() < 0 ? Window.getWindowHeight() : position.getY());
-    }
-
+    /**
+     * What color is the pixel?
+     * @return the color.
+     */
     public Color getColor()
     {
         return color;
     }
 
+    /**
+     * Sets the color of the entity.
+     * @param color Which color you would like the entity to be.
+     */
     public void setColor(Color color)
     {
         this.color = color;
     }
 
+    /**
+     * What is the position of the entity?
+     * @return the position.
+     */
     public Vector2 getPosition()
     {
         return position;
     }
 
+    /**
+     * Check whether the entity is on the board or not.
+     * @return ^
+     */
+    public boolean isOnBoard()
+    {
+        return onBoard;
+    }
+
+    /**
+     * Toggle whether the entity is on the board or not.
+     * @param onBoard ^
+     */
+    public void setOnBoard(boolean onBoard)
+    {
+        this.onBoard = onBoard;
+    }
+
+    /**
+     * Sets the position of the pixel, if it is not in bounds then it will move it into bounds somewhere.
+     * @param position The position we want to move the pixel.
+     */
     public void setPosition(Vector2 position)
     {
         if (this.position == null) // If it is null then we have not placed it in yet.
@@ -153,9 +176,36 @@ public abstract class Entity
         else
         {
             if (isOutOfBounds(position))
+            {
                 moveIntoBounds(position);
+            }
+            if (entityList[(int)position.getY()][(int)position.getX()] != null)
+            {
+                return;
+            }
             entityList[(int) this.position.getY()][(int) this.position.getX()] = null;
             entityList[(int) position.getY()][(int) position.getX()] = this;
+            this.position = position;
         }
+    }
+
+    /**
+     * Removes from the entity list and sets position to null.
+     */
+    public void delete()
+    {
+        entityList[(int)position.getY()][(int)position.getX()] = null;
+        position = null;
+        onBoard = false;
+    }
+
+    /**
+     * Removes from entity list but does not set position to null.
+     * Can use to get the last position of the pixel before it was removed.
+     */
+    public void remove()
+    {
+        entityList[(int)position.getY()][(int)position.getX()] = null;
+        onBoard = false;
     }
 }

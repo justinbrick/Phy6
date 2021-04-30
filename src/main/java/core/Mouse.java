@@ -6,9 +6,7 @@ import static org.lwjgl.glfw.GLFW.*;
 
 /**
  * This is how we'll be getting events or information from the mouse.
- * Some of this was ripped by a tutorial online, but I don't think this guy knew what he was doing,
- * and I was reasonably tired and too lazy to do this at the time, so this'll probably be reworked in a way
- * that actually makes sense to use in game fashion.
+ * TODO: Make static class (we don't need listeners in such a simple game)
  */
 public class Mouse
 {
@@ -40,6 +38,7 @@ public class Mouse
         mouse.lastY = mouse.mouseY;
         mouse.mouseX = mouseX;
         mouse.mouseY = mouseY;
+        //System.out.println(mouseX + " " + mouseY);
         debugPixel.setPosition(new Vector2((int)mouseX / 10, 69 - (int)mouseY / 10));
     }
 

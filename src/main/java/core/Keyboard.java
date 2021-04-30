@@ -22,7 +22,6 @@ public class Keyboard
     {
         if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
         {
-            System.out.println("Goodbye!");
             glfwSetWindowShouldClose(window, true);
         }
     }

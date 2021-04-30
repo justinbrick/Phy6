@@ -28,12 +28,12 @@ public class Window
     // These might change in the future? I don't think so but better to encapsulate them than refactor.
     public static int getWindowHeight()
     {
-        return windowWidth;
+        return windowHeight;
     }
 
     public static int getWindowWidth()
     {
-        return windowHeight;
+        return windowWidth;
     }
 
     public void run()
@@ -44,6 +44,7 @@ public class Window
         init();
         loop(); // When this exits, that means that they have closed the window.
 
+        System.out.println("Goodbye!");
         glfwFreeCallbacks(window); // Free all callbacks.
         glfwDestroyWindow(window); // Now destroy the window.
 
@@ -69,9 +70,6 @@ public class Window
         window = glfwCreateWindow(1200, 700, "Phy6", NULL, NULL);
         if ( window == NULL )
             throw new RuntimeException("Failed to create the GLFW window");
-
-
-
 
         // Setting up the callbacks.
         glfwSetMouseButtonCallback(window, Mouse::updateMouseButton);
@@ -115,7 +113,6 @@ public class Window
         glMatrixMode(GL_PROJECTION); // We want to do projection during this entire project.
         glLoadIdentity();
         glOrtho(0, 120, 0, 70, -1, 1); // see https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glOrtho.xml
-        Entity.debug();
         // Will continue running until closed.
         while ( !glfwWindowShouldClose(window) ) {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
