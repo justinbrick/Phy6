@@ -4,6 +4,8 @@ package core;
 import static org.lwjgl.opengl.GL11.*;
 
 import java.awt.*;
+import java.security.spec.RSAOtherPrimeInfo;
+import java.util.Vector;
 
 /**
  * Entity
@@ -15,12 +17,12 @@ import java.awt.*;
  */
 public abstract class Entity
 {
-    public static Entity[][] entityList = new Entity[140][240]; // Maybe not hardcode this?
+    private static Entity[][] entityList = new Entity[140][240]; // Maybe not hardcode this?
     private Color color = Color.WHITE; // The color of this object.
-    private Vector2 position = null; // The position of the object on the screen.
+    private Vector2 position; // The position of the object on the screen.
     private Vector2 velocity;
-    private boolean onBoard = true;
-    private boolean hasTicked = false;
+    public boolean onBoard;
+    public boolean hasTicked;
 
     public Entity()
     {
@@ -74,16 +76,17 @@ public abstract class Entity
      */
     public static void render()
     {
+        int i = 0;
         for (int row = 0; row < entityList.length; ++row)
         {
             for (int column = 0; column < entityList[row].length; ++column)
             {
                 Entity ent = entityList[row][column];
                 if (ent == null || !ent.isOnBoard()) continue;
-                //glClear(GL_COLOR_BUFFER_BIT); // Clear the colors.
+                ++i;
                 glColor3fv(ent.getColor().getRGBColorComponents(null));
                 glBegin(GL_POLYGON);
-                // As I understand, the third value is the distance to and from the screen. We don't care about that.
+                // Left Top Forward <-- Vertex renders
                 glVertex3f(column, row, 0.0f); // Bottom Left
                 glVertex3f(column + 1, row, 0.0f); // Bottom Right
                 glVertex3f(column + 1, row + 1, 0.0f); // Top Right
@@ -92,10 +95,12 @@ public abstract class Entity
                 //glFlush(); //FORCERENDER
             }
         }
+        System.out.println(i);
+        // This returns 41
     }
 
     /**
-     * Will do logic on all the pixels that are in the board.
+     * Will do logic on all the pixels that are on the board.
      */
     public static void update()
     {
@@ -104,14 +109,15 @@ public abstract class Entity
                 if (ent != null)
                     ent.hasTicked = false;
 
+        int i = 0;
         for (int row = 0; row < entityList.length; ++row)
         {
             for (int column = 0; column < entityList[row].length; ++column)
             {
                 Entity ent = entityList[row][column];
-                if (ent == null || ent.hasTicked) continue;
-                ent.position.setY(row);
-                ent.position.setX(column);
+                if (ent == null || ent.hasTicked || !ent.isOnBoard()) continue;
+                System.out.println(row + " , " + column);
+                ++i;
                 ent.tick();
                 ent.hasTicked = true;
             }
@@ -164,7 +170,6 @@ public abstract class Entity
     {
         if (this.position == null)
         {
-            System.out.println("being called");
             spawn(position);
         }
         else
@@ -178,10 +183,7 @@ public abstract class Entity
                 return;
             }
 
-            // TODO: I'm going to go insane.
-            // This will not remove the last pixel no matter what I do.
-            // I want to shoot myself in the foot.
-            entityList[(int) this.position.getY()][(int) this.position.getX()] = null;
+            entityList[(int) getPosition().getY()][(int) getPosition().getX()] = null;
             entityList[(int) position.getY()][(int) position.getX()] = this;
             this.position = position;
         }
@@ -204,8 +206,6 @@ public abstract class Entity
     {
         this.onBoard = onBoard;
     }
-
-
 
     /**
      * Removes from the entity list and sets position to null.
@@ -247,17 +247,17 @@ public abstract class Entity
 
     public void moveDown()
     {
-        setPosition(getPosition().withY(getPosition().getY() - 1));
+        setPosition(new Vector2(getPosition().getX(), getPosition().getY() - 1));
     }
 
     public void moveLeft()
     {
-        setPosition(getPosition().withX(getPosition().getX() - 1));
+        setPosition(new Vector2(getPosition().getX() - 1, getPosition().getY()));
     }
 
     public void moveRight()
     {
-        setPosition(getPosition().withX(getPosition().getY() + 1));
+        setPosition(new Vector2(getPosition().getX() + 1, getPosition().getY()));
     }
 
     public Vector2 getVelocity()

@@ -100,28 +100,24 @@ public class Window
         glfwMakeContextCurrent(window);
         // Enable v-sync
         glfwSwapInterval(1);
-
         // Make the window visible
         glfwShowWindow(window);
     }
 
     private void loop()
     {
-        // Allows interop (essential)
-        GL.createCapabilities();
-        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-        glMatrixMode(GL_PROJECTION); // We want to do projection during this entire project.
-        glLoadIdentity();
+        GL.createCapabilities(); // Allows interop (essential)
+        glClearColor(0.0f, 0.0f, 0.0f, 0.0f); // Setting the clear color to this
+        glMatrixMode(GL_PROJECTION); // We want to do projection during this entire project
+        glLoadIdentity(); // Load the identity (???)
         glOrtho(0, 240, 0, 140, -1, 1); // see https://www.khronos.org/registry/OpenGL-Refpages/gl2.1/xhtml/glOrtho.xml
-        // Will continue running until closed.
-        new SandPixel(new Vector2(20, 20));
-
-        while ( !glfwWindowShouldClose(window) ) {
+        new SandPixel(new Vector2(20, 20)); // Debug TODO: Delete
+        while ( !glfwWindowShouldClose(window) )
+        {
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear the framebuffer
             Game.update(); // Do game logic.
             glfwPollEvents(); // Check for input
             glfwSwapBuffers(window); // swap the color buffers
-
         }
     }
 }

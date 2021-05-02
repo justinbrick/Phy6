@@ -12,12 +12,12 @@ public class SandPixel extends Entity
 
     public void tick()
     {
-
         if (isSpaceBelow())
             moveDown();
         else if (isSpaceLeft())
             moveLeft();
         else if (isSpaceRight())
             moveRight();
+        hasTicked = true;
     }
 }
