@@ -55,9 +55,9 @@ public abstract class Entity
 
     public static void moveIntoBounds(Vector2 position)
     {
-        position.setX((position.getX() > entityList[0].length) ? entityList[0].length - 1 : position.getX());
+        position.setX((position.getX() >= entityList[0].length) ? entityList[0].length - 1 : position.getX());
         position.setX((position.getX() < 0) ? 0 : position.getX());
-        position.setY((position.getY() > entityList[0].length) ? entityList[0].length - 1 : position.getY());
+        position.setY((position.getY() >= entityList.length) ? entityList.length - 1 : position.getY());
         position.setY((position.getY() < 0) ? 0 : position.getY());
     }
 
@@ -68,7 +68,7 @@ public abstract class Entity
      */
     public static boolean isOutOfBounds(Vector2 position)
     {
-        return position.getY() > entityList.length || position.getX() > entityList[0].length || position.getX() < 0 || position.getY() < 0;
+        return position.getY() >= entityList.length || position.getX() >= entityList[0].length || position.getX() < 0 || position.getY() < 0;
     }
 
     /**
