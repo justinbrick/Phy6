@@ -18,7 +18,12 @@ public class Game
     {
         if (Mouse.isLeftButtonDown())
         {
-            new SandPixel(new Vector2((float) Mouse.getMouseX() / 5, (float) Mouse.getMouseY() / 5 - 1));
+            float mouseX = (float) Mouse.getMouseX() / 5;
+            float mouseY = (float) Mouse.getMouseY() / 5 - 1;
+            new SandPixel(new Vector2(mouseX, mouseY));
+            new SandPixel(new Vector2(mouseX + 1, mouseY));
+            new SandPixel(new Vector2(mouseX - 1, mouseY));
+
         }
     }
 

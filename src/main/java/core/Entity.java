@@ -220,22 +220,62 @@ public abstract class Entity
         onBoard = false;
     }
 
+
+    /**
+     * Check if the space below the entity is empty, returns false if out of bounds.
+     * @return if there is space.
+     */
     public boolean isSpaceBelow()
     {
         if (isOutOfBounds(new Vector2(getPosition().getX(), getPosition().getY() - 1))) return false;
         return getEntityAt(new Vector2(getPosition().getX(), getPosition().getY() - 1)) == null;
     }
 
+    /**
+     * Check if the space left of the entity is empty, returns false if out of bounds.
+     * @return if there is space.
+     */
     public boolean isSpaceLeft()
     {
         if (isOutOfBounds(new Vector2(getPosition().getX() - 1, getPosition().getY()))) return false;
         return getEntityAt(new Vector2(getPosition().getX() - 1, getPosition().getY())) == null;
     }
 
+    /**
+     * Check if the space right of the entity is empty, returns false if out of bounds.
+     * @return if there is space.
+     */
     public boolean isSpaceRight()
     {
         if (isOutOfBounds(new Vector2(getPosition().getX() + 1, getPosition().getY()))) return false;
         return getEntityAt(new Vector2(getPosition().getX() + 1, getPosition().getY())) == null;
+    }
+
+    /**
+     * Get the entity below this pixel, null if none.
+     * @return The entity
+     */
+    public Entity getEntityBelow()
+    {
+        return getEntityAt(new Vector2(getPosition().getX(), getPosition().getY() - 1));
+    }
+
+    /**
+     * Get the entity left of this pixel, null if none.
+     * @return The entity
+     */
+    public Entity getEntityLeft()
+    {
+        return getEntityAt(new Vector2(getPosition().getX() - 1, getPosition().getY()));
+    }
+
+    /**
+     * Get the entity right of this pixel, null if none.
+     * @return The entity
+     */
+    public Entity getEntityRight()
+    {
+        return getEntityAt(new Vector2(getPosition().getX() + 1, getPosition().getY()));
     }
 
     /**
