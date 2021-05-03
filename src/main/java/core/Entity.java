@@ -17,7 +17,9 @@ import java.util.Vector;
  */
 public abstract class Entity
 {
+    public static final float GRAVITY_CONST = 5.12f; // How fast gravity will change
     private static Entity[][] entityList = new Entity[140][240]; // Maybe not hardcode this?
+    private PixelType pixelType;
     private Color color = Color.WHITE; // The color of this object.
     private Vector2 position; // The position of the object on the screen.
     private Vector2 velocity;
@@ -29,8 +31,9 @@ public abstract class Entity
         spawn(new Vector2(0,0));
     }
 
-    public Entity(Color color, Vector2 position)
+    public Entity(PixelType type, Color color, Vector2 position)
     {
+        this.pixelType = type;
         this.color = color;
         spawn(position);
     }
@@ -128,6 +131,11 @@ public abstract class Entity
      */
     public abstract void tick();
 
+    public PixelType getPixelType()
+    {
+        return pixelType;
+    }
+
     /**
      * What color is the pixel?
      * @return the color.
@@ -182,6 +190,16 @@ public abstract class Entity
         }
     }
 
+    public Vector2 getVelocity()
+    {
+        return this.velocity;
+    }
+
+    public void setVelocity(Vector2 vel)
+    {
+        this.velocity = vel;
+    }
+
     /**
      * Check whether the entity is on the board or not.
      * @return ^
@@ -219,7 +237,6 @@ public abstract class Entity
         entityList[(int)position.getY()][(int)position.getX()] = null;
         onBoard = false;
     }
-
 
     /**
      * Check if the space below the entity is empty, returns false if out of bounds.
@@ -261,8 +278,6 @@ public abstract class Entity
         return getEntityAt(new Vector2(getPosition().getX() + 1, getPosition().getY())) == null;
     }
 
-
-
     /**
      * Get the entity below this pixel, null if none.
      * @return The entity
@@ -300,10 +315,40 @@ public abstract class Entity
     }
 
     /**
+     * This will try to move the pixel according to the velocity. If it manages to find something that will prevent it
+     * from moving in it's path like another pixel or bounds, then it will stop in it's path and subtract some from
+     * it's own velocity and add to the other.
+     * TODO: Implement
+     */
+    public void tryMoveQuery()
+    {
+
+    }
+
+    public void tryMoveDown()
+    {
+        velocity.setX(velocity.getX() - GRAVITY_CONST);
+        setPosition(new Vector2(getPosition().getX(), getPosition().getY() - 1));
+    }
+
+    public void tryMoveLeft()
+    {
+        setPosition(new Vector2(getPosition().getX() - 1, getPosition().getY()));
+    }
+
+    public void tryMoveRight()
+    {
+        setPosition(new Vector2(getPosition().getX() + 1, getPosition().getY()));
+    }
+
+    /**
      * I originally made these sets of move methods thinking none the wiser, but little did I know
      * that one of the helper functions I made, withX and withY for vectors, did not instantiate new vectors.
      * What felt like years of pain and grief later, I ended up finding the bug and wanted to punch myself
      * in the face. Anyway! That's now fixed, and I will start questioning my own sanity from now on.
+     */
+    /**
+     * Normal movement functions, will attempt to move in any cardinal direction.
      */
     public void moveDown()
     {
@@ -320,14 +365,23 @@ public abstract class Entity
         setPosition(new Vector2(getPosition().getX() + 1, getPosition().getY()));
     }
 
-    public Vector2 getVelocity()
+    /**
+     * Swaps the places of two pixels.
+     * @param pixel The other pixel that you're swapping this one with.
+     */
+    public void swapPixels(Entity pixel)
     {
-        return this.velocity;
+        if (pixel == null)
+        {
+            System.err.println("Tried swapping null pixel!");
+            return;
+        }
+        // Replace these on the entity board.
+        entityList[(int)pixel.getPosition().getY()][(int)pixel.getPosition().getX()] = this;
+        entityList[(int)getPosition().getY()][(int)getPosition().getX()] = pixel;
+        // Now swap the position values of these two.
+        Vector2 temp = getPosition();
+        setPosition(pixel.getPosition());
+        pixel.setPosition(temp);
     }
-
-    public void setVelocity(Vector2 vel)
-    {
-        this.velocity = vel;
-    }
-
 }

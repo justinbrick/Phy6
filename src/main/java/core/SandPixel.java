@@ -10,7 +10,7 @@ public class SandPixel extends Entity
 
     public SandPixel(Vector2 pos)
     {
-        super(Color.YELLOW, pos);
+        super(PixelType.SAND, Color.YELLOW, pos);
     }
 
     public void tick()

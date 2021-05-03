@@ -24,5 +24,9 @@ public class Keyboard
         {
             glfwSetWindowShouldClose(window, true);
         }
+        if (key >= GLFW_KEY_0 && key <= GLFW_KEY_9)
+        {
+            Game.changePixel(key);
+        }
     }
 }
