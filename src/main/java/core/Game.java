@@ -1,5 +1,7 @@
 package core;
 
+import java.util.Vector;
+
 public class Game
 {
 
@@ -8,7 +10,16 @@ public class Game
     {
         Time.updateDeltaTime();
         Entity.render();
+        checkForMouseUpdates();
         Entity.update();
+    }
+
+    private static void checkForMouseUpdates()
+    {
+        if (Mouse.isLeftButtonDown())
+        {
+            new SandPixel(new Vector2((float) Mouse.getMouseX() / 5, (float) Mouse.getMouseY() / 5 - 1));
+        }
     }
 
     public static void place()

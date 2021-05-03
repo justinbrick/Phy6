@@ -76,14 +76,12 @@ public abstract class Entity
      */
     public static void render()
     {
-        int i = 0;
         for (int row = 0; row < entityList.length; ++row)
         {
             for (int column = 0; column < entityList[row].length; ++column)
             {
                 Entity ent = entityList[row][column];
                 if (ent == null || !ent.isOnBoard()) continue;
-                ++i;
                 glColor3fv(ent.getColor().getRGBColorComponents(null));
                 glBegin(GL_POLYGON);
                 // Left Top Forward <-- Vertex renders
@@ -95,8 +93,6 @@ public abstract class Entity
                 //glFlush(); //FORCERENDER
             }
         }
-        System.out.println(i);
-        // This returns 41
     }
 
     /**
@@ -109,15 +105,12 @@ public abstract class Entity
                 if (ent != null)
                     ent.hasTicked = false;
 
-        int i = 0;
         for (int row = 0; row < entityList.length; ++row)
         {
             for (int column = 0; column < entityList[row].length; ++column)
             {
                 Entity ent = entityList[row][column];
                 if (ent == null || ent.hasTicked || !ent.isOnBoard()) continue;
-                System.out.println(row + " , " + column);
-                ++i;
                 ent.tick();
                 ent.hasTicked = true;
             }
@@ -245,6 +238,12 @@ public abstract class Entity
         return getEntityAt(new Vector2(getPosition().getX() + 1, getPosition().getY())) == null;
     }
 
+    /**
+     * I originally made these sets of move methods thinking none the wiser, but little did I know
+     * that one of the helper functions I made, withX and withY for vectors, did not instantiate new vectors.
+     * What felt like years of pain and grief later, I ended up finding the bug and wanted to punch myself
+     * in the face. Anyway! That's now fixed, and I will start questioning my own sanity from now on.
+     */
     public void moveDown()
     {
         setPosition(new Vector2(getPosition().getX(), getPosition().getY() - 1));

@@ -1,6 +1,7 @@
 package core;
 
 import java.awt.*;
+import java.util.Vector;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
@@ -25,8 +26,17 @@ public class Mouse
         lastY = mouseY;
         mouseX = newMouseX;
         mouseY = newMouseY;
-        //System.out.println(mouseX + " " + mouseY);
         drawMouseCursor((int) (140 - mouseY / 5 - 1), (int)mouseX / 5);
+    }
+
+    public static double getMouseX()
+    {
+        return mouseX;
+    }
+
+    public static double getMouseY()
+    {
+        return Window.getWindowHeight() - mouseY;
     }
 
     private static void drawMouseCursor(int mouseX, int mouseY)
@@ -43,7 +53,8 @@ public class Mouse
 
     public static void updateMouseButton(long window, int button, int action, int mods)
     {
-        if (button > mouseButtonDown.length || button < mouseButtonDown.length) return;
+
+        if (button > mouseButtonDown.length || button < 0) return;
         if (action == GLFW_PRESS)
         {
             mouseButtonDown[button] = true;
