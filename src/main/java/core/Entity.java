@@ -232,6 +232,16 @@ public abstract class Entity
     }
 
     /**
+     * Check if the space above the entity is empty, returns false if out of bounds.
+     * @return if there is space.
+     */
+    public boolean isSpaceAbove()
+    {
+        if (isOutOfBounds(new Vector2(getPosition().getX(), getPosition().getY() + 1))) return false;
+        return getEntityAt(new Vector2(getPosition().getX(), getPosition().getY() + 1)) == null;
+    }
+
+    /**
      * Check if the space left of the entity is empty, returns false if out of bounds.
      * @return if there is space.
      */
@@ -251,11 +261,22 @@ public abstract class Entity
         return getEntityAt(new Vector2(getPosition().getX() + 1, getPosition().getY())) == null;
     }
 
+
+
     /**
      * Get the entity below this pixel, null if none.
      * @return The entity
      */
     public Entity getEntityBelow()
+    {
+        return getEntityAt(new Vector2(getPosition().getX(), getPosition().getY() - 1));
+    }
+
+    /**
+     * Get the entity above this pixel, null if none.
+     * @return The entity
+     */
+    public Entity getEntityAbove()
     {
         return getEntityAt(new Vector2(getPosition().getX(), getPosition().getY() - 1));
     }
