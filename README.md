@@ -6,10 +6,10 @@ This is inspired by the game "Noita" which has an engine called "Falling Sand".
 
 # Game Plan
 - ~~Setup LWGL~~ 
-- ~~Get basic utilities (Delta Time, Etc.)
-- ~~Create Pixel interface/class
-- ~~Add logic to pixel classes
-- ~~Sand Pixel
+- ~~Get basic utilities (Delta Time, Etc.)~~
+- ~~Create Pixel interface/class~~
+- ~~Add logic to pixel classes~~
+- ~~Sand Pixel~~
 - Water Pixel
 - Dirt Pixel
 - Wood Pixel

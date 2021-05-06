@@ -52,9 +52,6 @@ public class Game
             {
                 System.err.println("Other except");
             }
-            //new SandPixel(new Vector2(mouseX, mouseY));
-            //new SandPixel(new Vector2(mouseX + 1, mouseY));
-            //new SandPixel(new Vector2(mouseX - 1, mouseY));
         }
     }
 
