@@ -20,10 +20,16 @@ public class SandPixel extends Entity
             moveDown();
         else
         {
-            if (direction > 0.5 && isSpaceRight())
+            if (direction > 0.5 && isSpaceBottomRight())
+            {
                 moveRight();
-            else if (direction < 0.5 && isSpaceLeft())
+                moveDown();
+            }
+            else if (direction < 0.5 && isSpaceBottomLeft())
+            {
                 moveLeft();
+                moveDown();
+            }
         }
         hasTicked = true;
     }

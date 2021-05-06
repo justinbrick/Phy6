@@ -269,6 +269,26 @@ public abstract class Entity
     }
 
     /**
+     * Check if the space left of the entity is empty, returns false if out of bounds.
+     * @return if there is space.
+     */
+    public boolean isSpaceBottomLeft()
+    {
+        if (isOutOfBounds(new Vector2(getPosition().getX() - 1, getPosition().getY() - 1))) return false;
+        return getEntityAt(new Vector2(getPosition().getX() - 1, getPosition().getY() - 1)) == null;
+    }
+
+    /**
+     * Check if the space left of the entity is empty, returns false if out of bounds.
+     * @return if there is space.
+     */
+    public boolean isSpaceBottomRight()
+    {
+        if (isOutOfBounds(new Vector2(getPosition().getX() + 1, getPosition().getY() - 1))) return false;
+        return getEntityAt(new Vector2(getPosition().getX() + 1, getPosition().getY() - 1)) == null;
+    }
+
+    /**
      * Check if the space right of the entity is empty, returns false if out of bounds.
      * @return if there is space.
      */
@@ -341,12 +361,6 @@ public abstract class Entity
         setPosition(new Vector2(getPosition().getX() + 1, getPosition().getY()));
     }
 
-    /**
-     * I originally made these sets of move methods thinking none the wiser, but little did I know
-     * that one of the helper functions I made, withX and withY for vectors, did not instantiate new vectors.
-     * What felt like years of pain and grief later, I ended up finding the bug and wanted to punch myself
-     * in the face. Anyway! That's now fixed, and I will start questioning my own sanity from now on.
-     */
     /**
      * Normal movement functions, will attempt to move in any cardinal direction.
      */
