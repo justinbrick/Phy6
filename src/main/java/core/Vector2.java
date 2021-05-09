@@ -1,5 +1,7 @@
 package core;
 
+import com.sun.istack.internal.Nullable;
+
 /**
  * Vector2
  *
@@ -42,6 +44,18 @@ public class Vector2
     public void setY(float y)
     {
         this.y = y;
+    }
+
+    public void subtract(Vector2 vec)
+    {
+        x -= vec.getX();
+        y -= vec.getY();
+    }
+
+    public void add(Vector2 vec)
+    {
+        x += vec.getX();
+        y += vec.getY();
     }
 
     public Vector2 withX(float x)

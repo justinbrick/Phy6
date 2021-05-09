@@ -17,7 +17,6 @@ public class WaterPixel extends Entity
             if (ent.getPixelType() == PixelType.SAND)
                 swapPixels(ent);
 
-
         float move = random.nextFloat();
         if (isSpaceBelow())
             moveDown();

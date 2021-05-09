@@ -52,7 +52,7 @@ public abstract class Entity
             return;
         }
         entityList[(int) position.getY()][(int) position.getX()] = this;
-        this.position = position;
+        this.position = new Vector2(position.getX(), position.getY());
         onBoard = true;
     }
 
@@ -186,7 +186,9 @@ public abstract class Entity
 
             entityList[(int) getPosition().getY()][(int) getPosition().getX()] = null;
             entityList[(int) position.getY()][(int) position.getX()] = this;
-            this.position = position;
+            this.position.setX(position.getX());
+            this.position.setY(position.getY());
+            onBoard = true;
         }
     }
 
@@ -313,7 +315,7 @@ public abstract class Entity
      */
     public Entity getEntityAbove()
     {
-        return getEntityAt(new Vector2(getPosition().getX(), getPosition().getY() - 1));
+        return getEntityAt(new Vector2(getPosition().getX(), getPosition().getY() + 1));
     }
 
     /**
@@ -366,6 +368,7 @@ public abstract class Entity
      */
     public void moveDown()
     {
+        // TODO: This instantiates 3 different Vector2 objects, find better method.
         setPosition(new Vector2(getPosition().getX(), getPosition().getY() - 1));
     }
 
@@ -390,12 +393,13 @@ public abstract class Entity
             System.err.println("Tried swapping null pixel!");
             return;
         }
-        // Replace these on the entity board.
-        entityList[(int)pixel.getPosition().getY()][(int)pixel.getPosition().getX()] = this;
-        entityList[(int)getPosition().getY()][(int)getPosition().getX()] = pixel;
-        // Now swap the position values of these two.
-        Vector2 temp = getPosition();
-        setPosition(pixel.getPosition());
-        pixel.setPosition(temp);
+        // Remove these both from the board.
+        remove();
+        pixel.remove();
+        Vector2 ourPos = getPosition();
+        Vector2 pixelPos = pixel.getPosition();
+        Vector2 temp = new Vector2(pixel.getPosition());
+        pixel.spawn(getPosition());
+        spawn(temp);
     }
 }
