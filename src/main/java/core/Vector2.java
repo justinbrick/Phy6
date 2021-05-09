@@ -1,6 +1,5 @@
 package core;
 
-import com.sun.istack.internal.Nullable;
 
 /**
  * Vector2

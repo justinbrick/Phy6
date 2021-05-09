@@ -19,6 +19,9 @@ public class Game
         Entity.update();
     }
 
+    /**
+     * Check if the mouse has had any updates, and then place pixels in the world if there are any updates.
+     */
     private static void checkForMouseUpdates()
     {
         if (Mouse.isLeftButtonDown())
@@ -26,8 +29,6 @@ public class Game
             float mouseX = (float) Mouse.getMouseX() / 5;
             float mouseY = (float) Mouse.getMouseY() / 5 - 1;
 
-            // This was pretty clever, but might not be good for if I want to move over to compiled languages
-            // as this heavily depends on reflection. Who knows, maybe there's an equivalent to this in C++?
             try
             {
                 Constructor construct = currentlySelectedType.getConstructor(Vector2.class);
@@ -60,6 +61,10 @@ public class Game
 
     }
 
+    /**
+     * This is attached by keyboard, it will see what key is being pressed and change the pixel type accordingly.
+     * @param key The GLFW Keycode
+     */
     public static void changePixel(int key)
     {
         switch (key)
