@@ -88,6 +88,34 @@ public class Vector2
         return vec;
     }
 
+    public Vector2 left(int distance)
+    {
+        Vector2 vec = new Vector2(this);
+        vec.setX(vec.getX() - distance);
+        return vec;
+    }
+
+    public Vector2 right(int distance)
+    {
+        Vector2 vec = new Vector2(this);
+        vec.setX(vec.getX() + distance);
+        return vec;
+    }
+
+    public Vector2 up(int distance)
+    {
+        Vector2 vec = new Vector2(this);
+        vec.setY(vec.getY() + distance);
+        return vec;
+    }
+
+    public Vector2 down(int distance)
+    {
+        Vector2 vec = new Vector2(this);
+        vec.setY(vec.getY() - distance);
+        return vec;
+    }
+
     /**
      * Subtracts from the current vector the values of the one given.
      * @param vec the vector we are subtracting this one with.
