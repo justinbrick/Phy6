@@ -70,6 +70,9 @@ public class Game
             case GLFW_KEY_2:
                 currentlySelectedType = WaterPixel.class;
                 break;
+            case GLFW_KEY_3:
+                currentlySelectedType = WoodPixel.class;
+                break;
         }
     }
 }
