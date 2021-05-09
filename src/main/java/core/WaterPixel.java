@@ -18,11 +18,11 @@ public class WaterPixel extends Entity
                 swapPixels(ent);
 
         float move = random.nextFloat();
-        if (isSpaceBelow())
+        if (isSpace(getPosition().down()))
             moveDown();
-        else if(isSpaceRight() && move > 0.5f)
+        else if(isSpace(getPosition().right()) && move > 0.5f)
             moveRight();
-        else if (isSpaceLeft() && move < 0.5f)
+        else if (isSpace(getPosition().left()) && move < 0.5f)
             moveLeft();
     }
 }

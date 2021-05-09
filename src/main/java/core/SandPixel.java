@@ -16,16 +16,16 @@ public class SandPixel extends Entity
     public void tick()
     {
         double direction = random.nextDouble();
-        if (isSpaceBelow())
+        if (isSpace(getPosition().down()))
             moveDown();
         else
         {
-            if (direction > 0.5 && isSpaceBottomRight())
+            if (direction > 0.5 && isSpace(getPosition().right().down()))
             {
                 moveRight();
                 moveDown();
             }
-            else if (direction < 0.5 && isSpaceBottomLeft())
+            else if (direction < 0.5 && isSpace(getPosition().left().down()))
             {
                 moveLeft();
                 moveDown();

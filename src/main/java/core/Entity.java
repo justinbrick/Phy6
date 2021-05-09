@@ -35,6 +35,7 @@ public abstract class Entity
     {
         this.pixelType = type;
         this.color = color;
+        this.velocity = new Vector2();
         spawn(position);
     }
 
@@ -56,6 +57,10 @@ public abstract class Entity
         onBoard = true;
     }
 
+    /**
+     * Moves the given vector into bounds.
+     * @param position the position that could potentially be out of bounds.
+     */
     public static void moveIntoBounds(Vector2 position)
     {
         position.setX((position.getX() >= entityList[0].length) ? entityList[0].length - 1 : position.getX());
@@ -241,63 +246,14 @@ public abstract class Entity
     }
 
     /**
-     * Check if the space below the entity is empty, returns false if out of bounds.
-     * @return if there is space.
+     * Check if there is space at a certain position.
+     * @param pos The position we're checking
+     * @return Whether or not the space is available.
      */
-    public boolean isSpaceBelow()
+    public static boolean isSpace(Vector2 pos)
     {
-        if (isOutOfBounds(new Vector2(getPosition().getX(), getPosition().getY() - 1))) return false;
-        return getEntityAt(new Vector2(getPosition().getX(), getPosition().getY() - 1)) == null;
-    }
-
-    /**
-     * Check if the space above the entity is empty, returns false if out of bounds.
-     * @return if there is space.
-     */
-    public boolean isSpaceAbove()
-    {
-        if (isOutOfBounds(new Vector2(getPosition().getX(), getPosition().getY() + 1))) return false;
-        return getEntityAt(new Vector2(getPosition().getX(), getPosition().getY() + 1)) == null;
-    }
-
-    /**
-     * Check if the space left of the entity is empty, returns false if out of bounds.
-     * @return if there is space.
-     */
-    public boolean isSpaceLeft()
-    {
-        if (isOutOfBounds(new Vector2(getPosition().getX() - 1, getPosition().getY()))) return false;
-        return getEntityAt(new Vector2(getPosition().getX() - 1, getPosition().getY())) == null;
-    }
-
-    /**
-     * Check if the space left of the entity is empty, returns false if out of bounds.
-     * @return if there is space.
-     */
-    public boolean isSpaceBottomLeft()
-    {
-        if (isOutOfBounds(new Vector2(getPosition().getX() - 1, getPosition().getY() - 1))) return false;
-        return getEntityAt(new Vector2(getPosition().getX() - 1, getPosition().getY() - 1)) == null;
-    }
-
-    /**
-     * Check if the space left of the entity is empty, returns false if out of bounds.
-     * @return if there is space.
-     */
-    public boolean isSpaceBottomRight()
-    {
-        if (isOutOfBounds(new Vector2(getPosition().getX() + 1, getPosition().getY() - 1))) return false;
-        return getEntityAt(new Vector2(getPosition().getX() + 1, getPosition().getY() - 1)) == null;
-    }
-
-    /**
-     * Check if the space right of the entity is empty, returns false if out of bounds.
-     * @return if there is space.
-     */
-    public boolean isSpaceRight()
-    {
-        if (isOutOfBounds(new Vector2(getPosition().getX() + 1, getPosition().getY()))) return false;
-        return getEntityAt(new Vector2(getPosition().getX() + 1, getPosition().getY())) == null;
+        if (isOutOfBounds(pos)) return false;
+        return getEntityAt(pos) == null;
     }
 
     /**
@@ -336,19 +292,10 @@ public abstract class Entity
         return getEntityAt(new Vector2(getPosition().getX() + 1, getPosition().getY()));
     }
 
-    /**
-     * This will try to move the pixel according to the velocity. If it manages to find something that will prevent it
-     * from moving in it's path like another pixel or bounds, then it will stop in it's path and subtract some from
-     * it's own velocity and add to the other.
-     * TODO: Implement
-     */
-    public void tryMoveQuery()
-    {
-
-    }
 
     public void tryMoveDown()
     {
+
         velocity.setX(velocity.getX() - GRAVITY_CONST);
         setPosition(new Vector2(getPosition().getX(), getPosition().getY() - 1));
     }

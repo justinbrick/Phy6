@@ -1,6 +1,8 @@
 package core;
 
 
+import java.util.Vector;
+
 /**
  * Vector2
  *
@@ -12,6 +14,13 @@ public class Vector2
 {
     private float x;
     private float y;
+
+    /* Blank Constructor */
+    public Vector2()
+    {
+        this.x = 0;
+        this.y = 0;
+    }
 
     /* Normal Constructor */
     public Vector2(float x, float y)
@@ -49,6 +58,37 @@ public class Vector2
     }
 
     /**
+     * These functions have been made to prevent the redundant code I made earlier in the Entity class.
+     */
+    public Vector2 left()
+    {
+        Vector2 vec = new Vector2(this);
+        vec.setX(vec.getX() - 1);
+        return vec;
+    }
+
+    public Vector2 right()
+    {
+        Vector2 vec = new Vector2(this);
+        vec.setX(vec.getX() + 1);
+        return vec;
+    }
+
+    public Vector2 up()
+    {
+        Vector2 vec = new Vector2(this);
+        vec.setY(vec.getY() + 1);
+        return vec;
+    }
+
+    public Vector2 down()
+    {
+        Vector2 vec = new Vector2(this);
+        vec.setY(vec.getY() - 1);
+        return vec;
+    }
+
+    /**
      * Subtracts from the current vector the values of the one given.
      * @param vec the vector we are subtracting this one with.
      */
@@ -75,8 +115,9 @@ public class Vector2
      */
     public Vector2 withX(float x)
     {
-        this.x = x;
-        return new Vector2(this);
+        Vector2 vec = new Vector2(this);
+        vec.setX(x);
+        return vec;
     }
 
     /**
@@ -86,8 +127,9 @@ public class Vector2
      */
     public Vector2 withY(float y)
     {
-        this.y = y;
-        return new Vector2(this);
+        Vector2 vec = new Vector2(this);
+        vec.setY(y);
+        return vec;
     }
 
     public String toString()
