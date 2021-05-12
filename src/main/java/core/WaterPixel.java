@@ -12,7 +12,7 @@ public class WaterPixel extends Entity
     }
     public void tick()
     {
-        Entity ent = getEntityAbove();
+        Entity ent = getEntityAt(getPosition().up());
         if (ent != null)
             if (ent.getPixelType() == PixelType.SAND)
                 swapPixels(ent);

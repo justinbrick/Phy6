@@ -26,11 +26,6 @@ public abstract class Entity
     public boolean onBoard;
     public boolean hasTicked;
 
-    public Entity()
-    {
-        spawn(new Vector2(0,0));
-    }
-
     public Entity(PixelType type, Color color, Vector2 position)
     {
         this.pixelType = type;
@@ -98,7 +93,7 @@ public abstract class Entity
                 glVertex3f(column + 1, row + 1, 0.0f); // Top Right
                 glVertex3f(column, row + 1, 0.0f); // Top Left
                 glEnd();
-                //glFlush(); //FORCERENDER
+                //glFlush(); //FORCE RENDER
             }
         }
     }
@@ -113,18 +108,26 @@ public abstract class Entity
                 if (ent != null)
                     ent.hasTicked = false;
 
+        int totalPixels = 0;
         for (int row = 0; row < entityList.length; ++row)
         {
             for (int column = 0; column < entityList[row].length; ++column)
             {
                 Entity ent = entityList[row][column];
                 if (ent == null || ent.hasTicked || !ent.isOnBoard()) continue;
+                ++totalPixels;
                 ent.tick();
                 ent.hasTicked = true;
             }
         }
+        Window.setPoints(totalPixels);
     }
 
+    /**
+     * Get the entity at a certain position.
+     * @param position the position we're looking.
+     * @return the entity at this position in the board, or null if out of bounds or nonexistant.
+     */
     public static Entity getEntityAt(Vector2 position)
     {
         if (isOutOfBounds(position)) return null;
@@ -256,60 +259,14 @@ public abstract class Entity
         return getEntityAt(pos) == null;
     }
 
-    /**
-     * Get the entity below this pixel, null if none.
-     * @return The entity
-     */
-    public Entity getEntityBelow()
+    public void physicsMove()
     {
-        return getEntityAt(new Vector2(getPosition().getX(), getPosition().getY() - 1));
+        if (pixelType == PixelType.WATER)
+        {
+            
+        }
     }
-
-    /**
-     * Get the entity above this pixel, null if none.
-     * @return The entity
-     */
-    public Entity getEntityAbove()
-    {
-        return getEntityAt(new Vector2(getPosition().getX(), getPosition().getY() + 1));
-    }
-
-    /**
-     * Get the entity left of this pixel, null if none.
-     * @return The entity
-     */
-    public Entity getEntityLeft()
-    {
-        return getEntityAt(new Vector2(getPosition().getX() - 1, getPosition().getY()));
-    }
-
-    /**
-     * Get the entity right of this pixel, null if none.
-     * @return The entity
-     */
-    public Entity getEntityRight()
-    {
-        return getEntityAt(new Vector2(getPosition().getX() + 1, getPosition().getY()));
-    }
-
-
-    public void tryMoveDown()
-    {
-
-        velocity.setX(velocity.getX() - GRAVITY_CONST);
-        setPosition(new Vector2(getPosition().getX(), getPosition().getY() - 1));
-    }
-
-    public void tryMoveLeft()
-    {
-        setPosition(new Vector2(getPosition().getX() - 1, getPosition().getY()));
-    }
-
-    public void tryMoveRight()
-    {
-        setPosition(new Vector2(getPosition().getX() + 1, getPosition().getY()));
-    }
-
+    // I'm not refactoring this yet until I find how I want to implement these physics.
     /**
      * Normal movement functions, will attempt to move in any cardinal direction.
      */
@@ -343,8 +300,6 @@ public abstract class Entity
         // Remove these both from the board.
         remove();
         pixel.remove();
-        Vector2 ourPos = getPosition();
-        Vector2 pixelPos = pixel.getPosition();
         Vector2 temp = new Vector2(pixel.getPosition());
         pixel.spawn(getPosition());
         spawn(temp);

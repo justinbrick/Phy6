@@ -3,10 +3,10 @@ package core;
 import static org.lwjgl.glfw.GLFW.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Vector;
 
 public class Game
 {
+    private static int points = 0; // No destruction for pixels yet, instead let's give points based on how many pixels are on screen.
     // Making using of Reflection
     public static Class currentlySelectedType = SandPixel.class;
 
@@ -39,7 +39,6 @@ public class Game
             catch (NoSuchMethodException e)
             {
                 System.err.println("Could not find constructor for class!");
-                return;
             }
             catch (InstantiationException e)
             {
@@ -56,28 +55,28 @@ public class Game
         }
     }
 
-    public static void place()
-    {
-
-    }
-
     /**
      * This is attached by keyboard, it will see what key is being pressed and change the pixel type accordingly.
      * @param key The GLFW Keycode
      */
     public static void changePixel(int key)
     {
+        String type = "INVALID";
         switch (key)
         {
             case GLFW_KEY_1:
                 currentlySelectedType = SandPixel.class;
+                type = "Sand Pixel";
                 break;
             case GLFW_KEY_2:
                 currentlySelectedType = WaterPixel.class;
+                type = "Water Pixel";
                 break;
             case GLFW_KEY_3:
                 currentlySelectedType = WoodPixel.class;
+                type = "Wood Pixel";
                 break;
         }
+        Window.updatePixelType(type);
     }
 }

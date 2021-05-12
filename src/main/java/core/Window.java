@@ -21,7 +21,10 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class Window
 {
-    private long window; // The handle for the window (GLFW)
+    private static long window; // The handle for the window (GLFW)
+    private static int points = 0;
+    private static String pixelType = "Water Pixel";
+    private static String title = String.format("Phy6 - Currently Selected: %s - Points: %d", pixelType, points);
     private static final int windowWidth = 1200;
     private static final int windowHeight = 700;
 
@@ -34,6 +37,26 @@ public class Window
     public static int getWindowWidth()
     {
         return windowWidth;
+    }
+
+
+    public static void setPoints(int amount)
+    {
+        points = amount;
+        updateWindow();
+    }
+
+
+    public static void updatePixelType(String pixelName)
+    {
+        pixelType = pixelName;
+    }
+
+    // This will be called to refresh the name afterwards.
+    private static void updateWindow()
+    {
+        title = String.format("Phy6 - Currently Selected: %s - Points: %d", pixelType, points);
+        glfwSetWindowTitle(window, title);
     }
 
     public void run()
